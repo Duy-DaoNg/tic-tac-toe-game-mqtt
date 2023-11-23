@@ -15,6 +15,6 @@ Follow these line below to run this project
 ### 3. Run command to start server
 Using Git Bash on a WinOS, run this command:
 ```bash
-  docker run -dp 8883:8883 --name tic-tac-toe-container -v "$(pwd):/app" duydaong/tic-tac-toe-game:v1.0.0
+  docker run -dp 8883:8883 --name tic-tac-toe-container -v "$(pwd):/app" duydaong/tic-tac-toe-game:latest
 
 ```
