@@ -66,7 +66,7 @@ public class MqttConfig {
                                 "{\"operation\":\"result\"," +
                                     "\"roomId\":\""+ temp.roomId + "\","  +
                                     "\"type\":\"draw\"," +
-                                    "\"roomId\":\""+ temp.roomId + "\""  +
+                                    "\"winnerId\":\""+ temp.currentPlayer + "\""  +
                                 "}";
                         break;
                     default:
@@ -120,6 +120,18 @@ public class MqttConfig {
                 sendMessage(message);
             }
         });
+    }
+
+    public static void exitMatch(String roomId, String player) {
+        Match temp = matchList.get(roomId);
+        String winner = (player.equals(temp.firstPlayerID)) ? temp.secondPlayerID : temp.firstPlayerID;
+        String message =
+                "{\"operation\":\"exit-player\"," +
+                    "\"type\":\"winner\"," +
+                    "\"roomId\":\""+ roomId + "\","  +
+                    "\"winnerId\":\""+ winner + "\"" +
+                "}";
+        sendMessage(message);
     }
 
     public static Mqtt3AsyncClient configureAndConnect() {
@@ -180,7 +192,11 @@ public class MqttConfig {
                                 String playerRestart = jsonNode.get("senderId").asText();
                                 restartMatch(roomIdRestart, playerRestart);
                                 break;
-
+                            case "exit":
+                                // TODO:
+                                String roomIdExit = jsonNode.get("roomId").asText();
+                                String playerExit = jsonNode.get("senderId").asText();
+                                exitMatch(roomIdExit, playerExit);
                             case "disconnect":
                                 String roomIdDis = jsonNode.get("roomId").asText();
                                 String playerDis = jsonNode.get("clientId").asText();
